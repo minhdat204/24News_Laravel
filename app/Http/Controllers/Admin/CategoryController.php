@@ -62,6 +62,19 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $category = Category::find($id);
+        $category->delete();
+        return redirect()->route('admin.category')->with('success', 'Category deleted successfully.');
+    }
+    public function hide(string $id)
+    {
+        $category = Category::find($id);
+        $category->status = !$category->status;
+        $category->save();
+        if (!$category->status)
+            session()->flash('success', 'Category đã được ẩn thành công!');
+        else if ($category->status)
+            session()->flash('success', 'Category đã được hiện thành công!');
+        return redirect()->route('admin.category');
     }
 }

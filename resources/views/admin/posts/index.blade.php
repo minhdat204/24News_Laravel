@@ -19,6 +19,11 @@
     <div class="row" style="margin-bottom: 20px">
         <div class="col-lg-12">
             <h1 class="page-header">Posts</h1>
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
         </div>
         <!-- /.col-lg-12 -->
     </div>

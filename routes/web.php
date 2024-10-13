@@ -88,6 +88,7 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/admin/category/{id}/edit', [CategoryController::class, 'edit'])->name('admin.category.edit');
     Route::put('/admin/category/{id}/update', [CategoryController::class, 'update'])->name('admin.category.update');
     Route::delete('/admin/category/{id}/delete', [CategoryController::class, 'destroy'])->name('admin.category.destroy');
+    Route::put('/admin/category/{id}/hide', [CategoryController::class, 'hide'])->name('admin.category.hide');
 
     //subscribe
     Route::get('/admin/subscribe', [ContactController::class, 'index'])->name('admin.subscribe');

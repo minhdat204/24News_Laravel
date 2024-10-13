@@ -100,10 +100,15 @@ class PostController extends Controller
     {
         //
     }
-    public function hide(string $id){
+    public function hide(string $id)
+    {
         $post = Post::find($id);
         $post->status = !$post->status;
         $post->save();
+        if (!$post->status)
+            session()->flash('success', 'Post đã được ẩn thành công!');
+        else if ($post->status)
+            session()->flash('success', 'Post đã được hiện thị thành công!');
         return redirect()->route('admin.post');
     }
 }
