@@ -62,14 +62,6 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputFile">Author:</label>
-                            <select class="form-control" name="author_id">
-                                @foreach ($authors as $author)
-                                    <option value="{{ $author->id }}">{{ $author->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
                             <label>Chọn tags</label>
                             <div class="checkbox-tags">
                                 @foreach ($tags as $tag)
@@ -204,20 +196,6 @@
                                                                     @else
                                                                         <option value="{{ $category->id }}">
                                                                             {{ $category->name }}</option>
-                                                                    @endif
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="exampleInputFile">Author</label>
-                                                            <select class="form-control" name="author_id">
-                                                                @foreach ($authors as $author)
-                                                                    @if ($author->id == $post->author_id)
-                                                                        <option value="{{ $author->id }}" selected>
-                                                                            {{ $author->name }}</option>
-                                                                    @else
-                                                                        <option value="{{ $author->id }}">
-                                                                            {{ $author->name }}</option>
                                                                     @endif
                                                                 @endforeach
                                                             </select>

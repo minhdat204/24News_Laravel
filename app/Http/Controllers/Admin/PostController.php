@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Models\Tags;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -44,12 +45,18 @@ class PostController extends Controller
             'content' => 'required|string',
             'image_path' => 'nullable|string',
             'category_id' => 'required|exists:categories,id',  // Xác thực category
-            'author_id' => 'required|exists:users,id',       // Xác thực author
             'tags' => 'required|array', // Tags là một mảng các ID
             'tags.*' => 'exists:tags,id', // Mỗi tag phải tồn tại
         ]);
-        $post = Post::create($validatedData);
+        $post = Post::create([
+            'title' => $validatedData['title'],
+            'content' => $validatedData['content'],
+            'image_path' => $validatedData['image_path'],
+            'category_id' => $validatedData['category_id'],
+            'author_id' => Auth::user()->id, // Lấy ID người dùng đang đăng nhập
+        ]);
         $post->tags()->attach($request->input('tags'));
+        // session()->flash('success', 'Post được tạo thành công!');
         return redirect()->route('admin.post')->with('success', 'Bài viết đã được tạo thành công!');
     }
 
@@ -79,7 +86,6 @@ class PostController extends Controller
             'content' => 'required|string',
             'image_path' => 'nullable|string',
             'category_id' => 'required|exists:categories,id',  // Xác thực category
-            'author_id' => 'required|exists:users,id',       // Xác thực author
             'tags' => 'required|array', // Tags là một mảng các ID
             'tags.*' => 'exists:tags,id', // Mỗi tag phải tồn tại
         ]);
@@ -88,8 +94,14 @@ class PostController extends Controller
         //// $post->description = $request->description;
         //// $post->save();
         // $post->update($request->all());
-        $post->update($validatedData);
+        $post->update([
+            'title' => $validatedData['title'],
+            'content' => $validatedData['content'],
+            'image_path' => $validatedData['image_path'],
+            'category_id' => $validatedData['category_id'],
+        ]);
         $post->tags()->sync($request->input('tags'));
+        // session()->flash('success', 'Post được cập nhật thành công!');
         return redirect()->route('admin.post')->with('success', 'Bài viết đã được cập nhật thành công!');
     }
 
@@ -106,9 +118,9 @@ class PostController extends Controller
         $post->status = !$post->status;
         $post->save();
         if (!$post->status)
-            session()->flash('success', 'Post đã được ẩn thành công!');
+            session()->flash('success', 'Bài viết đã được ẩn thành công!');
         else if ($post->status)
-            session()->flash('success', 'Post đã được hiện thị thành công!');
+            session()->flash('success', 'Bài viết đã được hiện thị thành công!');
         return redirect()->route('admin.post');
     }
 }

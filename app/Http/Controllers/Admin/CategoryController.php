@@ -54,7 +54,13 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validateData = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+        $category = Category::findOrFail($id);
+        $category->update($validateData);
+        session()->flash('success', 'Category được cập nhật thành công!');
+        return redirect()->route('admin.category');
     }
 
     /**
