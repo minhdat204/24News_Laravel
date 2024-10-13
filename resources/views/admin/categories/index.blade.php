@@ -35,7 +35,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ route('admin.post.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.category.store') }}" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
@@ -122,7 +122,7 @@
                                                         <div class="form-group">
                                                             <label for="name" class="col-form-label">Name:</label>
                                                             <input type="text" class="form-control" id="recipient-name"
-                                                                name="title" value="{{ $category->name }}">
+                                                                name="name" value="{{ $category->name }}">
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">

@@ -20,7 +20,7 @@ class PostController extends Controller
         // $posts = Post::where('status', '=', 1)->get();
         // $posts = Post::with('author', 'category', 'tags')->where('status', 1)->get();
         $posts = Post::with('author', 'category', 'tags')->get();
-        $categories = Category::all();
+        $categories = Category::all()->where('status', 1);
         $authors = User::all();
         $tags = Tags::all();
         return view('admin.posts.index', compact('posts', 'categories', 'authors', 'tags'));
