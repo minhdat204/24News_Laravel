@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactController;
+use App\Http\Controllers\Admin\SubscribeController;
 use Illuminate\Support\Facades\Route;
 //user routes
 Route::get('/', function () {
@@ -90,8 +91,14 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::delete('/admin/category/{id}/delete', [CategoryController::class, 'destroy'])->name('admin.category.destroy');
 
     //subscribe
-    Route::get('/admin/subscribe', [ContactController::class, 'index'])->name('admin.subscribe');
-    Route::get('/admin/subscribe/{id}/delete', [ContactController::class, 'unsubscribe'])->name('admin.subscribe.delete');
+    Route::get('/admin/subscribe', [SubscribeController::class, 'index'])->name('admin.subscribe');
+    Route::put('/admin/subscribe/{id}/destroy', [SubscribeController::class, 'unSubscribed'])->name('admin.subscribe.destroy');
+    Route::put('/admin/subscribe/{id}/update', [SubscribeController::class, 'update'])->name('admin.subscribe.update');
+    Route::put('/admin/subscribe/store', [SubscribeController::class, 'store'])->name('admin.subscribe.store');
+    Route::put('/admin/subscribers/bulk-actions', [SubscribeController::class, 'bulkActions'])->name('admin.subscribe.bulkActions');
+
+
+
 
     //tag
     Route::get('/admin/tag', [PostController::class, 'index'])->name('admin.tag');
