@@ -210,6 +210,21 @@
                 <li>
                     <a href="{{ route('admin.post') }}"><i class="fa fa-table fa-fw"></i> Post</a>
                 </li>
+                <li>
+                    <a href="{{ route('admin.category') }}"><i class="fa fa-table fa-fw"></i> Category</a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.user') }}"><i class="fa fa-table fa-fw"></i> User</a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.subscribe') }}"><i class="fa fa-table fa-fw"></i> Subscribe</a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.tag') }}"><i class="fa fa-table fa-fw"></i> Tag</a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.contact') }}"><i class="fa fa-table fa-fw"></i> Contact</a>
+                </li>
             </ul>
         </div>
     </aside>
