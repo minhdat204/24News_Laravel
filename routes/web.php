@@ -64,7 +64,7 @@ Route::put('/admin/login', [AuthController::class, 'login'])->name('admin.login'
 Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::put('/admin/logout', [AuthController::class, 'logout'])->name('admin.logout');
     Route::get('/admin/dashboard', function () {
-        return view('admin.pages.index');
+        return view('admin.dashboard.index');
         // return "Admin dashboard"; // This will be replaced by the actual dashboard view.
     })->name('admin.dashboard');
     Route::get('/admin/post', [PostController::class, 'index'])->name('admin.post');

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
+
 class AuthController extends Controller
 {
     public function showLoginForm()
@@ -31,8 +32,12 @@ class AuthController extends Controller
         // Authentication
         if ($user && Hash::check($credentials['password'], $user->password)) {
             Auth::login($user);
-            $request->session()->regenerate();
-            return redirect()->intended('/admin/dashboard');
+            $request->session()->regenerate(); //tao moi phien
+            //get user
+            $userName = Auth::user()->name;
+            $request->session()->put('name', $userName);
+
+            return redirect()->route('admin.dashboard');
         }
         // if (Auth::attempt([x
         //     'email' => $credentials['email'],
@@ -52,6 +57,6 @@ class AuthController extends Controller
         $request->session()->invalidate(); // Hủy session hiện tại
         $request->session()->regenerateToken(); // Tạo token CSRF mới để tránh tấn công CSRF
 
-        return redirect('/admin/login'); // Chuyển hướng về trang đăng nhập
+        return redirect()->route('admin.login'); // Chuyển hướng về trang đăng nhập
     }
 }

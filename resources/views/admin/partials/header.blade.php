@@ -74,7 +74,7 @@
             </li>
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <i class="fa fa-user fa-fw"></i> secondtruth <b class="caret"></b>
+                    <i class="fa fa-user fa-fw"></i> {{ session('name') }} <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu dropdown-user">
                     <li>
