@@ -206,6 +206,10 @@
                     </ul>
                     <!-- /.nav-second-level -->
                 </li>
+
+                <li>
+                    <a href="{{ route('admin.post') }}"><i class="fa fa-table fa-fw"></i> Post</a>
+                </li>
             </ul>
         </div>
     </aside>
