@@ -117,7 +117,7 @@
                     <!-- /input-group -->
                 </li>
                 <li>
-                    <a href="{{ route('admin.index') }}" class="active"><i class="fa fa-dashboard fa-fw"></i>
+                    <a href="{{ route('admin.dashboard') }}"><i class="fa fa-dashboard fa-fw"></i>
                         Dashboard</a>
                 </li>
                 <li>

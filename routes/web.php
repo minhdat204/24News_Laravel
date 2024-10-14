@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\SubscribeController;
+use App\Http\Controllers\Admin\TagController;
 use Illuminate\Support\Facades\Route;
 //user routes
 Route::get('/', function () {
@@ -101,8 +102,11 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
 
 
     //tag
-    Route::get('/admin/tag', [PostController::class, 'index'])->name('admin.tag');
-    Route::get('/admin/tag/{id}/delete', [PostController::class, 'deleteTag'])->name('admin.tag.delete');
+    Route::get('/admin/tag', [TagController::class, 'index'])->name('admin.tag');
+    Route::put('/admin/tag/store', [tagController::class, 'store'])->name('admin.tag.store');
+    Route::put('/admin/tag/{id}/update', [tagController::class, 'update'])->name('admin.tag.update');
+    Route::put('/admin/tag/{id}/hide', [tagController::class, 'hide'])->name('admin.tag.hide');
+    Route::delete('/admin/tag/{id}/delete', [tagController::class, 'destroy'])->name('admin.tag.destroy');
 
     //user
     Route::get('/admin/user', [ContactController::class, 'index'])->name('admin.user');
