@@ -32,6 +32,16 @@
                     {{ session('success') }}
                 </div>
             @endif
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
         </div>
     </div>
     <!--Create modal-->
@@ -74,14 +84,14 @@
                         <form action="{{ route('admin.subscribe.bulkActions') }}" method="POST">
                             @csrf
                             @method('PUT')
-                            <div>
+                            <div style="display:flex; justify-content: flex-end; margin-bottom: 5px">
                                 <select name="action">
                                     <option value="delete">Delete</option>
                                     <option value="activate">Activate</option>
                                     <option value="export">Export</option>
                                 </select>
 
-                                <button type="submit">Apply</button>
+                                <button type="submit" class="btn btn-info btn-sm">Apply</button>
                             </div>
                             <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                 <div style="position: relative; z-index:1">
@@ -95,6 +105,7 @@
                                         <th><input type="checkbox" id="select-all"> Select All</th>
                                         <th class="text-center">Email</th>
                                         <th class="text-center">Subscribed_at</th>
+                                        <th class="text-center">Status</th>
                                         <th class="text-center">Actions</th>
                                     </tr>
                                 </thead>
@@ -105,6 +116,13 @@
                                             </td>
                                             <td>{{ $subscribe->email }}</td>
                                             <td>{{ $subscribe->subscribed_at }}</td>
+                                            <td class="text-center">
+                                                @if ($subscribe->status)
+                                                    <span class="label label-success">Active</span>
+                                                @else
+                                                    <span class="label label-danger">Inactive</span>
+                                                @endif
+                                            </td>
                                             <td>
                                                 <div
                                                     style="display: flex; justify-content: space-evenly;;
@@ -138,7 +156,8 @@
                                                         @method('PUT')
                                                         <div class="modal-body">
                                                             <div class="form-group">
-                                                                <label for="email" class="col-form-label">Email:</label>
+                                                                <label for="email"
+                                                                    class="col-form-label">Email:</label>
                                                                 <input type="text" class="form-control"
                                                                     id="recipient-email" name="email"
                                                                     value="{{ $subscribe->email }}">

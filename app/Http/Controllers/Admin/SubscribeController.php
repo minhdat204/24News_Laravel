@@ -111,7 +111,7 @@ class SubscribeController extends Controller
                 break;
 
             default:
-                return back()->withErrors(['Invalid action selected']);
+                return back()->withErrors(['action' => 'Invalid action selected']);
         }
 
         return redirect()->route('admin.subscribe');
