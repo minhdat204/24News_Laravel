@@ -80,9 +80,11 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
 
     //contacts
     Route::get('/admin/contact', [ContactController::class, 'index'])->name('admin.contact');
-    Route::get('/admin/contact/{id}/delete', [ContactController::class, 'destroy'])->name('admin.contact.destroy');
-    Route::get('/admin/contact/{id}/reply', [ContactController::class, 'reply'])->name('admin.contact.reply');
-    Route::put('/admin/contact/{id}/reply', [ContactController::class, 'storeReply'])->name('admin.contact.storeReply');
+    Route::put('/admin/contact/store', [contactController::class, 'store'])->name('admin.contact.store');
+    Route::put('/admin/contact/{id}/update', [contactController::class, 'update'])->name('admin.contact.update');
+    Route::put('/admin/contact/{id}/hide', [contactController::class, 'hide'])->name('admin.contact.hide');
+    Route::put('/admin/contact/{id}/delete', [contactController::class, 'destroy'])->name('admin.contact.destroy');
+    Route::put('/admin/contact/{id}/status', [contactController::class, 'updateStatus'])->name('admin.contact.status');
 
     //category
     Route::get('/admin/category', [CategoryController::class, 'index'])->name('admin.category');

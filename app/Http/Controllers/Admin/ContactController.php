@@ -31,7 +31,15 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validateData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string',
+        ]);
+        contact::create($validateData);
+        session()->flash('success', 'Thêm mới contact thành công!');
+        return redirect()->route('admin.contact');
     }
 
     /**
@@ -55,7 +63,16 @@ class ContactController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validateData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string',
+        ]);
+        $contact = contact::findOrFail($id);
+        $contact->update($validateData);
+        session()->flash('success', 'contact được cập nhật thành công!');
+        return redirect()->route('admin.contact');
     }
 
     /**
@@ -63,6 +80,32 @@ class ContactController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $contact = contact::find($id);
+        $contact->delete();
+        return redirect()->route('admin.contact')->with('success', 'contact deleted successfully.');
+    }
+    public function hide(string $id)
+    {
+        $contact = contact::find($id);
+        $contact->status = !$contact->status;
+        $contact->save();
+        if (!$contact->status)
+            session()->flash('success', 'contact đã được ẩn thành công!');
+        else if ($contact->status)
+            session()->flash('success', 'contact đã được hiện thành công!');
+        return redirect()->route('admin.contact');
+    }
+    public function updateStatus(Request $request, $id)
+    {
+        $contact = contact::find($id);
+        $contact->status = $request->status;
+        $contact->save();
+        if ($contact->status == 0)
+            session()->flash('success', 'contact đã được chuyển thành chưa xử lý!');
+        else if ($contact->status == 1)
+            session()->flash('success', 'contact đã được chuyển thành đang xử lý!');
+        else if ($contact->status == 2)
+            session()->flash('success', 'contact đã được chuyển thành đã xử lý!');
+        return redirect()->route('admin.contact');
     }
 }
