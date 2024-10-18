@@ -170,9 +170,10 @@
                                                             <input type="hidden" class="categoryId"
                                                                 value="{{ $category->id }}">
                                                             <!-- CAPTCHA -->
-                                                            <div class="g-recaptcha"
+                                                            {{-- <div class="g-recaptcha" id="recaptcha_{{ $category->id }}"
                                                                 data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}">
-                                                            </div>
+                                                            </div> --}}
+                                                            <div id="recaptcha_{{ $category->id }}"></div>
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
