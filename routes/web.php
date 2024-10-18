@@ -86,12 +86,16 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::put('/admin/contact/{id}/delete', [contactController::class, 'destroy'])->name('admin.contact.destroy');
     Route::put('/admin/contact/{id}/status', [contactController::class, 'updateStatus'])->name('admin.contact.status');
 
+
     //category
     Route::get('/admin/category', [CategoryController::class, 'index'])->name('admin.category');
     Route::put('/admin/category/store', [CategoryController::class, 'store'])->name('admin.category.store');
     Route::put('/admin/category/{id}/update', [CategoryController::class, 'update'])->name('admin.category.update');
     Route::put('/admin/category/{id}/hide', [CategoryController::class, 'hide'])->name('admin.category.hide');
     Route::delete('/admin/category/{id}/delete', [CategoryController::class, 'destroy'])->name('admin.category.destroy');
+    // Route::delete('/admin/category/{id}', [CategoryController::class, 'destroy'])->name('admin.category.destroy');
+
+
 
     //subscribe
     Route::get('/admin/subscribe', [SubscribeController::class, 'index'])->name('admin.subscribe');

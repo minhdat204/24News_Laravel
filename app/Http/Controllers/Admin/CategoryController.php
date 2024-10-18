@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use ReCaptcha\ReCaptcha;
 
 class CategoryController extends Controller
 {
@@ -68,12 +71,83 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id, Request $request)
     {
-        $category = Category::find($id);
-        $category->delete();
-        return redirect()->route('admin.category')->with('success', 'Category deleted successfully.');
+        // Xác thực CAPTCHA
+        // $recaptcha = new ReCaptcha(env('RECAPTCHA_SECRET_KEY'));
+        // $response = $recaptcha->verify($request->input('g-recaptcha-response'), $request->ip());
+
+        // if (!$response->isSuccess()) {
+        //     return response()->json(['error' => 'CAPTCHA không hợp lệ.'], 422);
+        // }
+
+        // Tìm và xóa danh mục
+        // Xác minh reCAPTCHA
+
+
+
+
+
+
+        // $recaptchaToken = $request->input('g-recaptcha');
+        // $client = new Client();
+        // $response = $client->post('https://www.google.com/recaptcha/api/siteverify', [
+        //     'form_params' => [
+        //         'secret' => env('RECAPTCHA_SECRET_KEY'),
+        //         'response' => $recaptchaToken,
+        //     ]
+        // ]);
+
+        // $body = json_decode((string)$response->getBody());
+
+        // if (!$body->success) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'message' => 'Captcha verification failed.'
+        //     ]);
+        // }
+
+        // Lấy token reCAPTCHA từ request (lúc tick vào ô check im not robot)
+        $recaptchaResponse = $request->input('recaptcha_response');
+        // Gửi yêu cầu xác minh đến Google
+        //cách 1: gắn thẳng query vào url
+        // $recaptcha = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret=' . env('RECAPTCHA_SECRET_KEY') . '&response=' . $recaptchaResponse);
+        // $recaptcha = json_decode($recaptcha);
+
+        //cách 2: tạo client + truyền mảng chứa secret và capcha token
+        $client = new Client();
+        $response = $client->post('https://www.google.com/recaptcha/api/siteverify', [
+            'form_params' => [
+                'secret' => env('RECAPTCHA_SECRET_KEY'),
+                'response' => $recaptchaResponse,
+            ]
+        ]); // -> trả về json
+
+        $recaptcha = json_decode((string)$response->getBody()); // -> tách json thành đối tượng
+
+        // Kiểm tra xác minh reCAPTCHA
+        if (!$recaptcha->success) {
+            return response()->json([
+                'success' => false,
+                'message' => 'CAPTCHA verification failed.'
+            ], 400);
+        }
+
+        $category = Category::findOrFail($id);
+        if ($category) {
+            $category->delete();
+            return response()->json([
+                'success' => true,
+                'message' => 'Category deleted successfully.'
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Category not found.'
+            ], 404);
+        }
     }
+
     public function hide(string $id)
     {
         $category = Category::find($id);

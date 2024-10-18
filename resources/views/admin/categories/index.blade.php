@@ -12,6 +12,14 @@
             });
         });
     </script>
+    <!--ajax delete category-->
+    <script src="{{ asset('admin/js/ajaxConfirm.js') }}"></script>
+
+    <!--auto reset capcha-->
+
+
+    <!--capcha v2-->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 @endsection
 
 @section('content')
@@ -79,7 +87,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($categories as $category)
-                                    <tr class="odd gradeX">
+                                    <tr class="odd gradeX" id="category_{{ $category->id }}">
                                         <td>{{ $category->name }}</td>
                                         <td>{{ $category->created_at }}</td>
                                         <td>{{ $category->updated_at }}</td>
@@ -89,7 +97,8 @@
                                                     align-items: center; align-content: center;">
                                                 <button type="button" class="btn btn-warning" data-toggle="modal"
                                                     data-target="#editModal{{ $category->id }}">edit</button>
-                                                <form action="{{ route('admin.category.hide', $category->id) }}"
+                                                <!--ẩn danh mục-->
+                                                {{-- <form action="{{ route('admin.category.hide', $category->id) }}"
                                                     method="POST">
                                                     @csrf
                                                     @method('PUT')
@@ -98,10 +107,84 @@
                                                     @else
                                                         <button type="submit" class="btn btn-success">Show</button>
                                                     @endif
-                                                </form>
+                                                </form> --}}
+                                                <!--xóa danh mục-->
+                                                <!-- Nút Xóa -->
+                                                {{-- <button class="btn btn-danger delete-btn"
+                                                    data-id="{{ $category->id }}">Xóa</button>
+
+                                                <!-- Modal xác nhận xóa -->
+                                                <div id="deleteModal" class="modal fade" tabindex="-1" role="dialog">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Xác nhận xóa</h5>
+                                                                <button type="button" class="close" data-dismiss="modal"
+                                                                    aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <p>Bạn có chắc muốn xóa danh mục này không?</p>
+                                                                <form id="deleteForm">
+                                                                    <input type="hidden" id="categoryId">
+                                                                    <!-- CAPTCHA -->
+                                                                    <div class="g-recaptcha"
+                                                                        data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}">
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                    data-dismiss="modal">Hủy</button>
+                                                                <button type="button" class="btn btn-danger"
+                                                                    id="confirmDelete">Xóa</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div> --}}
+
+                                                <button type="button" class="btn btn-danger pull-right" data-toggle="modal"
+                                                    data-target="#deleteModal{{ $category->id }}"
+                                                    aria-expanded="false">Delete</button>
                                             </div>
                                         </td>
                                     </tr>
+                                    <!--delete modal-->
+                                    <div class="modal fade" id="deleteModal{{ $category->id }}" tabindex="-1"
+                                        aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="createModalLabel">Delete</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <form id="deleteForm">
+                                                    <div class="modal-body">
+                                                        <p>Bạn có chắc muốn xóa danh mục này không?</p>
+
+                                                        <div class="form-group">
+                                                            <input type="hidden" class="categoryId"
+                                                                value="{{ $category->id }}">
+                                                            <!-- CAPTCHA -->
+                                                            <div class="g-recaptcha"
+                                                                data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Close</button>
+                                                        <button type="button" class="btn btn-danger confirmDelete"
+                                                            onclick="confirmDelete({{ $category->id }})">Delete</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <!--edit modal-->
                                     <div class="modal fade" id="editModal{{ $category->id }}" tabindex="-1"
                                         aria-labelledby="editModalLabel" aria-hidden="true">
@@ -121,8 +204,9 @@
                                                     <div class="modal-body">
                                                         <div class="form-group">
                                                             <label for="name" class="col-form-label">Name:</label>
-                                                            <input type="text" class="form-control" id="recipient-name"
-                                                                name="name" value="{{ $category->name }}">
+                                                            <input type="text" class="form-control"
+                                                                id="recipient-name" name="name"
+                                                                value="{{ $category->name }}">
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
