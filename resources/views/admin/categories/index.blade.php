@@ -12,14 +12,6 @@
             });
         });
     </script>
-    <!--ajax delete category-->
-    <script src="{{ asset('admin/js/ajaxConfirm.js') }}"></script>
-
-    <!--auto reset capcha-->
-
-
-    <!--capcha v2-->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 @endsection
 
 @section('content')
@@ -87,7 +79,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($categories as $category)
-                                    <tr class="odd gradeX" id="category_{{ $category->id }}">
+                                    <tr class="odd gradeX" id="item_{{ $category->id }}">
                                         <td>{{ $category->name }}</td>
                                         <td>{{ $category->created_at }}</td>
                                         <td>{{ $category->updated_at }}</td>
@@ -145,8 +137,8 @@
                                                 </div> --}}
 
                                                 <button type="button" class="btn btn-danger pull-right" data-toggle="modal"
-                                                    data-target="#deleteModal{{ $category->id }}"
-                                                    aria-expanded="false">Delete</button>
+                                                    data-target="#deleteModal{{ $category->id }}" aria-expanded="false"
+                                                    onclick="createCaptcha({{ $category->id }})">Delete</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -156,7 +148,7 @@
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="createModalLabel">Delete</h5>
+                                                    <h5 class="modal-title" id="deleteModalLabel">Delete</h5>
                                                     <button type="button" class="close" data-dismiss="modal"
                                                         aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
@@ -180,7 +172,7 @@
                                                         <button type="button" class="btn btn-secondary"
                                                             data-dismiss="modal">Close</button>
                                                         <button type="button" class="btn btn-danger confirmDelete"
-                                                            onclick="confirmDelete({{ $category->id }})">Delete</button>
+                                                            onclick="confirmDelete({{ $category->id }}, '{{ route('admin.category.destroy', $category->id) }}')">Delete</button>
                                                     </div>
                                                 </form>
                                             </div>

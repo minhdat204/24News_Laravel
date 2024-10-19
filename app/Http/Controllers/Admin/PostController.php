@@ -43,7 +43,6 @@ class PostController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'image_path' => 'nullable|string',
             'category_id' => 'required|exists:categories,id',  // Xác thực category
             'tags' => 'required|array', // Tags là một mảng các ID
             'tags.*' => 'exists:tags,id', // Mỗi tag phải tồn tại
@@ -51,7 +50,7 @@ class PostController extends Controller
         $post = Post::create([
             'title' => $validatedData['title'],
             'content' => $validatedData['content'],
-            'image_path' => $validatedData['image_path'],
+            'image_path' => $request['image_path'],
             'category_id' => $validatedData['category_id'],
             'author_id' => Auth::user()->id, // Lấy ID người dùng đang đăng nhập
         ]);

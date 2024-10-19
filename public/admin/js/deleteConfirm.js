@@ -1,6 +1,6 @@
 //nhan delete
-function confirmDelete(id){
-    const url = '/admin/category/' + id + '/delete';
+function confirmDelete(id, url, ){
+    // const url = '/admin/category/' + id + '/delete';
     const modal = '#deleteModal' + id;
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');//chuỗi mã
 
@@ -33,7 +33,7 @@ function confirmDelete(id){
     .then(data => {
         if (data.success) {
             // Xóa dòng category khỏi bảng
-            document.getElementById('category_' + id).remove();
+            document.getElementById('item_' + id).remove();
             // Đóng modal
             $(modal).modal('hide');
             // Thông báo thành công

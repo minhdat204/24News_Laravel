@@ -70,6 +70,12 @@
 
     <script src="{{ asset('admin/js/darkmode.js') }}"></script>
 
+    <!--ajax delete-->
+    <script src="{{ asset('admin/js/deleteConfirm.js') }}"></script>
+
+    <!--capcha v2-->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
 
     @yield('scripts')
 </body>

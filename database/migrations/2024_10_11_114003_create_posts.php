@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('image_path')->nullable();
             $table->foreignId('author_id')->constrained('users');
             $table->foreignId('category_id')->constrained('categories');
-            $table->integer('popularity_level')->nullable();//0, 1, 2
+            $table->integer('status')->default(1);
+            $table->integer('popularity_level')->nullable(); //0, 1, 2
             $table->timestamps();
         });
     }

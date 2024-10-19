@@ -74,16 +74,17 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
 
     //posts
     Route::get('/admin/post', [PostController::class, 'index'])->name('admin.post');
-    Route::post('/admin/post/hide/{id}', [PostController::class, 'hide'])->name('admin.post.hide');
-    Route::put('/admin/post/update/{id}', [PostController::class, 'update'])->name('admin.post.update');
+    Route::post('/admin/post/{id}/hide', [PostController::class, 'hide'])->name('admin.post.hide');
+    Route::put('/admin/post/{id}/update', [PostController::class, 'update'])->name('admin.post.update');
     Route::put('/admin/post/create', [PostController::class, 'store'])->name('admin.post.store');
+    Route::put('/admin/post/{id}/delete', [PostController::class, 'destroy'])->name('admin.post.destroy');
 
     //contacts
     Route::get('/admin/contact', [ContactController::class, 'index'])->name('admin.contact');
     Route::put('/admin/contact/store', [contactController::class, 'store'])->name('admin.contact.store');
     Route::put('/admin/contact/{id}/update', [contactController::class, 'update'])->name('admin.contact.update');
     Route::put('/admin/contact/{id}/hide', [contactController::class, 'hide'])->name('admin.contact.hide');
-    Route::put('/admin/contact/{id}/delete', [contactController::class, 'destroy'])->name('admin.contact.destroy');
+    Route::delete('/admin/contact/{id}/delete', [contactController::class, 'destroy'])->name('admin.contact.destroy');
     Route::put('/admin/contact/{id}/status', [contactController::class, 'updateStatus'])->name('admin.contact.status');
 
 

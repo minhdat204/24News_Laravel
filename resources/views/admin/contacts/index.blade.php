@@ -94,7 +94,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($contacts as $contact)
-                                    <tr class="odd gradeX">
+                                    <tr class="odd gradeX" id="item_{{ $contact->id }}">
                                         <td>{{ $contact->name }}</td>
                                         <td>{{ $contact->email }}</td>
                                         <td>{{ $contact->subject }}</td>
@@ -115,68 +115,97 @@
                                                     align-items: center; align-content: center;">
                                                 <button type="button" class="btn btn-warning" data-toggle="modal"
                                                     data-target="#editModal{{ $contact->id }}">edit</button>
-                                                <form action="{{ route('admin.contact.destroy', $contact->id) }}"
-                                                    method="POST">
-                                                    @csrf
-                                                    @method('PUT')
 
-                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                <button type="button" class="btn btn-warning" data-toggle="modal"
+                                                    data-target="#deleteModal{{ $contact->id }}"
+                                                    onclick="createCaptcha({{ $contact->id }})">delete</button>
 
-                                                </form>
                                                 <button type="button" class="btn btn-success" data-toggle="modal"
                                                     data-target="#showMessage{{ $contact->id }}">Show</button>
-                                                <!-- Modal show message-->
-                                                <div class="modal fade" id="showMessage{{ $contact->id }}" tabindex="-1"
-                                                    role="dialog" aria-labelledby="showMessageLabel" aria-hidden="true">
-                                                    <div class="modal-dialog" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <button type="button" class="close"
-                                                                    data-dismiss="modal"
-                                                                    aria-hidden="true">&times;</button>
-                                                                <h4 class="modal-title" id="showMessageLabel">Message</h4>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                {{ $contact->message }}
-                                                            </div>
-                                                            <div class="modal-footer"
-                                                                style="display:flex; justify-content: end">
-                                                                <button type="button" class="btn btn-default"
-                                                                    data-dismiss="modal"
-                                                                    style="margin-right: 5px">Close</button>
-                                                                <form
-                                                                    action="{{ route('admin.contact.status', $contact->id) }}"
-                                                                    method="POST">
-                                                                    @csrf
-                                                                    @method('PUT')
-                                                                    <select class="form-control" name="status">
-                                                                        <option value="0"
-                                                                            @if ($contact->status == 0) selected @endif>
-                                                                            Chưa xử lý
-                                                                        </option>
-                                                                        <option value="1"
-                                                                            @if ($contact->status == 1) selected @endif>
-                                                                            Đang xử lý
-                                                                        </option>
-                                                                        <option value="2"
-                                                                            @if ($contact->status == 2) selected @endif>
-                                                                            Đã xử lý
-                                                                        </option>
-                                                                    </select>
 
-                                                                    <button type="submit"
-                                                                        class="btn btn-primary">OK</button>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                        <!-- /.modal-content -->
-                                                    </div>
-                                                    <!-- /.modal-dialog -->
-                                                </div>
-                                                <!-- /.modal -->
                                             </div>
                                         </td>
                                     </tr>
+
+                                    <!--delete modal-->
+                                    <div class="modal fade" id="deleteModal{{ $contact->id }}" tabindex="-1"
+                                        aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="deleteModalLabel">delete contact</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <form>
+                                                    @csrf
+                                                    <div class="modal-body">
+                                                        <h1>bạn có muốn xóa contact này?</h1>
+                                                        <div class="form-group">
+                                                            <div id="recaptcha_{{ $contact->id }}"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Close</button>
+                                                        <button
+                                                            onclick="confirmDelete({{ $contact->id }}, '{{ route('admin.contact.destroy', $contact->id) }}')"
+                                                            type="button" class="btn btn-primary">Delete</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--End delele modal-->
+
+                                    <!-- Modal show message-->
+                                    <div class="modal fade" id="showMessage{{ $contact->id }}" tabindex="-1"
+                                        role="dialog" aria-labelledby="showMessageLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-hidden="true">&times;</button>
+                                                    <h4 class="modal-title" id="showMessageLabel">Message</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    {{ $contact->message }}
+                                                </div>
+                                                <div class="modal-footer" style="display:flex; justify-content: end">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal"
+                                                        style="margin-right: 5px">Close</button>
+                                                    <form action="{{ route('admin.contact.status', $contact->id) }}"
+                                                        method="POST">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <select class="form-control" name="status">
+                                                            <option value="0"
+                                                                @if ($contact->status == 0) selected @endif>
+                                                                Chưa xử lý
+                                                            </option>
+                                                            <option value="1"
+                                                                @if ($contact->status == 1) selected @endif>
+                                                                Đang xử lý
+                                                            </option>
+                                                            <option value="2"
+                                                                @if ($contact->status == 2) selected @endif>
+                                                                Đã xử lý
+                                                            </option>
+                                                        </select>
+
+                                                        <button type="submit" class="btn btn-primary">OK</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <!-- /.modal-content -->
+                                        </div>
+                                        <!-- /.modal-dialog -->
+                                    </div>
+                                    <!-- /.modal -->
+
+
                                     <!--edit modal-->
                                     <div class="modal fade" id="editModal{{ $contact->id }}" tabindex="-1"
                                         aria-labelledby="editModalLabel" aria-hidden="true">

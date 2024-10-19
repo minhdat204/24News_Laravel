@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Contact;
+use GuzzleHttp\Client;
 
 class ContactController extends Controller
 {
@@ -78,11 +79,33 @@ class ContactController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id, Request $request)
     {
-        $contact = contact::find($id);
+        $recaptchaResponse = $request->input('recaptcha_response');
+
+        $client = new Client();
+        $response = $client->post('https://www.google.com/recaptcha/api/siteverify', [
+            'form_params' => [
+                'secret' => env('RECAPTCHA_SECRET_KEY'),
+                'response' => $recaptchaResponse,
+            ]
+        ]); // -> trả về json
+
+        $recaptcha = json_decode((string)$response->getBody()); // -> tách json thành đối tượng
+
+        // Kiểm tra xác minh reCAPTCHA
+        if (!$recaptcha->success) {
+            return response()->json([
+                'success' => false,
+                'message' => 'CAPTCHA verification failed.'
+            ], 400);
+        }
+        $contact = contact::findOrFail($id);
         $contact->delete();
-        return redirect()->route('admin.contact')->with('success', 'contact deleted successfully.');
+        return response()->json([
+            'success' => true,
+            'message' => 'Contact deleted successfully.'
+        ]);
     }
     public function hide(string $id)
     {

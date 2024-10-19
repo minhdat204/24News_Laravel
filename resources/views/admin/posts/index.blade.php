@@ -150,9 +150,44 @@
                                                         <button type="submit" class="btn btn-success">show</button>
                                                     @endif
                                                 </form>
+                                                <button class="btn btn-danger" data-toggle="modal"
+                                                    data-target="#deleteModal{{ $post->id }}">delete</button>
                                             </div>
                                         </td>
                                     </tr>
+
+                                    <!--delete modal-->
+                                    <div class="modal fade" id="deleteModal{{ $post->id }}" tabindex="-1"
+                                        aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="deleteModalLabel">Delete post</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <form>
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-form-label">Are you sure
+                                                                delete this post?</label>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div id="recaptcha_{{ $post->id }}"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-primary">Delete</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--end delete modal-->
                                     <!--edit modal-->
                                     <div class="modal fade" id="editModal{{ $post->id }}" tabindex="-1"
                                         aria-labelledby="editModalLabel" aria-hidden="true">
