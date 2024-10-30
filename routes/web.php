@@ -75,9 +75,11 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     //posts
     Route::get('/admin/post', [PostController::class, 'index'])->name('admin.post');
     Route::post('/admin/post/{id}/hide', [PostController::class, 'hide'])->name('admin.post.hide');
+    Route::get('/admin/post/{id}/update', [PostController::class, 'edit'])->name('admin.post.edit');
     Route::put('/admin/post/{id}/update', [PostController::class, 'update'])->name('admin.post.update');
+    Route::get('/admin/post/create', [PostController::class, 'create'])->name('admin.post.create');
     Route::put('/admin/post/create', [PostController::class, 'store'])->name('admin.post.store');
-    Route::put('/admin/post/{id}/delete', [PostController::class, 'destroy'])->name('admin.post.destroy');
+    Route::delete('/admin/post/{id}/delete', [PostController::class, 'destroy'])->name('admin.post.destroy');
 
     //contacts
     Route::get('/admin/contact', [ContactController::class, 'index'])->name('admin.contact');

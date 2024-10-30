@@ -96,8 +96,8 @@
                             <thead>
                                 <div style="position: relative; z-index:1">
                                     <div style="position: absolute; right:0; z-index: 2;">
-                                        <button type="button" class="btn btn-primary pull-right" data-toggle="modal"
-                                            data-target="#createModal" aria-expanded="false">Create</button>
+                                        <a href="{{ route('admin.post.create') }}"><button type="button"
+                                                class="btn btn-primary pull-right">Create</button></a>
                                     </div>
                                 </div>
                                 <tr>
@@ -115,9 +115,9 @@
                             </thead>
                             <tbody>
                                 @foreach ($posts as $post)
-                                    <tr class="odd gradeX">
+                                    <tr class="odd gradeX" id="item_{{ $post->id }}">
                                         <td>{{ $post->title }}</td>
-                                        <td>{{ $post->content }}</td>
+                                        <td>{!! Str::limit($post->content, 50) !!}</td>
                                         <td>{{ $post->image_path }}</td>
                                         <td>{{ $post->author->name }}</td>
                                         <td>{{ $post->category->name }}</td>
@@ -140,8 +140,10 @@
                                             <div
                                                 style="display: flex; justify-content: space-evenly;;
                                                 align-items: center; align-content: center;">
-                                                <button type="button" class="btn btn-warning" data-toggle="modal"
-                                                    data-target="#editModal{{ $post->id }}">edit</button>
+
+                                                <a href="{{ route('admin.post.edit', $post->id) }}"><button type="button"
+                                                        class="btn btn-warning">edit</button></a>
+
                                                 <form action="{{ route('admin.post.hide', $post->id) }}" method="POST">
                                                     @csrf
                                                     @if ($post->status == 1)
@@ -151,7 +153,8 @@
                                                     @endif
                                                 </form>
                                                 <button class="btn btn-danger" data-toggle="modal"
-                                                    data-target="#deleteModal{{ $post->id }}">delete</button>
+                                                    data-target="#deleteModal{{ $post->id }}"
+                                                    onclick="createCaptcha({{ $post->id }})">delete</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -181,7 +184,8 @@
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary"
                                                             data-dismiss="modal">Close</button>
-                                                        <button type="submit" class="btn btn-primary">Delete</button>
+                                                        <button type="submit" class="btn btn-primary"
+                                                            onclick="confirmDelete({{ $post->id }}, '{{ route('admin.post.destroy', $post->id) }}')">Delete</button>
                                                     </div>
                                                 </form>
                                             </div>

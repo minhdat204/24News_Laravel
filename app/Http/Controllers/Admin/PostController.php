@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tags;
 use App\Models\User;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,7 +21,7 @@ class PostController extends Controller
         // $posts = Post::where('status', '=', 1)->get();
         // $posts = Post::with('author', 'category', 'tags')->where('status', 1)->get();
         $posts = Post::with('author', 'category', 'tags')->get();
-        $categories = Category::all()->where('status', 1);
+        $categories = Category::where('status', 1)->get();
         $authors = User::all();
         $tags = Tags::all();
         return view('admin.posts.index', compact('posts', 'categories', 'authors', 'tags'));
@@ -31,7 +32,11 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        $posts = Post::with('author', 'category', 'tags')->get();
+        $categories = Category::where('status', 1)->get();
+        $authors = User::all();
+        $tags = Tags::all();
+        return view('admin.posts.create', compact('posts', 'categories', 'authors', 'tags'));
     }
 
     /**
@@ -72,7 +77,11 @@ class PostController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $post = Post::with('author', 'category', 'tags')->where('id', $id)->where('status', 1)->first(); //first : lay 1 dong
+        $categories = Category::where('status', 1)->get();
+        $tags = Tags::all();
+
+        return view('admin.posts.edit', compact('post', 'categories', 'tags'));
     }
 
     /**
@@ -107,9 +116,33 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id, Request $request)
     {
-        //
+        $captchaResponse = $request->input('recaptcha_response');
+        $secretKey = env('RECAPTCHA_SECRET_KEY');
+        $client = new Client();
+        $response = $client->post('https://www.google.com/recaptcha/api/siteverify', [
+            'form_params' => [
+                'secret' => $secretKey,
+                'response' => $captchaResponse,
+            ]
+        ]);
+
+        $recaptcha = json_decode((string)$response->getBody());
+
+        if (!$recaptcha->success) {
+            return response()->json([
+                'success' => false,
+                'message' => 'CAPTCHA verification failed.'
+            ], 400);
+        }
+
+        $post = Post::find($id);
+        $post->delete();
+        return response()->json([
+            'success' => true,
+            'message' => 'Post deleted successfully'
+        ]);
     }
     public function hide(string $id)
     {

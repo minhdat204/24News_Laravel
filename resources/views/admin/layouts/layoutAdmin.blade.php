@@ -10,6 +10,12 @@
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+
+    {{-- ckeditor v5 --}}
+    <link rel="stylesheet" href="{{ asset('assets/vendor/ckeditor5.css') }}">
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.2.0/ckeditor5.css">
+    {{-- --}}
+
     <title>Startmin - Bootstrap Admin Theme</title>
 
     <!-- Bootstrap Core CSS -->
@@ -76,6 +82,16 @@
     <!--capcha v2-->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
+    <!--ckeditor v5-->
+    <script type="importmap">
+        {
+            "imports": {
+                "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/43.2.0/ckeditor5.js",
+                "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/43.2.0/"
+            }
+        }
+        </script>
+    <script type="module" src="{{ asset('assets/vendor/ckeditor5.js') }}"></script>
 
     @yield('scripts')
 </body>
