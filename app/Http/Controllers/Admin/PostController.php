@@ -10,7 +10,7 @@ use App\Models\User;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Str;
 class PostController extends Controller
 {
     /**
@@ -52,12 +52,21 @@ class PostController extends Controller
             'tags' => 'required|array', // Tags là một mảng các ID
             'tags.*' => 'exists:tags,id', // Mỗi tag phải tồn tại
         ]);
+        //slug
+        $slug = Str::slug($validatedData['title'], '-');
+        $originalSlug = $slug;
+        $count = 1;
+        while (Post::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $count;
+            $count++;
+        }
         $post = Post::create([
             'title' => $validatedData['title'],
             'content' => $validatedData['content'],
             'image_path' => $request['image_path'],
             'category_id' => $validatedData['category_id'],
             'author_id' => Auth::user()->id, // Lấy ID người dùng đang đăng nhập
+            'slug' => $slug,
         ]);
         $post->tags()->attach($request->input('tags'));
         // session()->flash('success', 'Post được tạo thành công!');
