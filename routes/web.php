@@ -80,6 +80,7 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/admin/post/create', [PostController::class, 'create'])->name('admin.post.create');
     Route::put('/admin/post/create', [PostController::class, 'store'])->name('admin.post.store');
     Route::delete('/admin/post/{id}/delete', [PostController::class, 'destroy'])->name('admin.post.destroy');
+    Route::get('/admin/post/{slug}', [PostController::class, 'detail'])->name('admin.post.detail');
 
     //contacts
     Route::get('/admin/contact', [ContactController::class, 'index'])->name('admin.contact');

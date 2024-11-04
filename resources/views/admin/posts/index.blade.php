@@ -155,6 +155,9 @@
                                                 <button class="btn btn-danger" data-toggle="modal"
                                                     data-target="#deleteModal{{ $post->id }}"
                                                     onclick="createCaptcha({{ $post->id }})">delete</button>
+                                                <a href="{{ route('admin.post.detail', $post->slug) }}"><button type="button"
+                                                    class="btn btn-success">detail</button></a>
+
                                             </div>
                                         </td>
                                     </tr>

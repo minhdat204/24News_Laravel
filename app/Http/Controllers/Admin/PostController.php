@@ -73,6 +73,11 @@ class PostController extends Controller
         return redirect()->route('admin.post')->with('success', 'Bài viết đã được tạo thành công!');
     }
 
+    public function detail(string $slug)
+    {
+        return view('admin.posts.detail');
+    }
+
     /**
      * Display the specified resource.
      */
